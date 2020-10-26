@@ -35,7 +35,15 @@ app.post('/api/users', (req, res) => {
    }
 })
 
-
+//get all users
+app.get('/api/users', (req, res) => {
+    try{
+        res.status(200).json(users)
+    }
+    catch (error){
+    res.status(500).json({errorMessage: "The users information could not be retrieved."})
+    }
+})
 
 
 
