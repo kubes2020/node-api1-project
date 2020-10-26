@@ -31,7 +31,7 @@ app.post('/api/users', (req, res) => {
     }
    }
    catch (error) {
-       res.status(500).json({ errorMessage: "There was an error while saving the user to the database"})
+       res.status(500).json({ message: error.message, stack: error.stack})
    }
 })
 
@@ -41,7 +41,7 @@ app.get('/api/users', (req, res) => {
         res.status(200).json(users)
     }
     catch (error){
-    res.status(500).json({errorMessage: "The users information could not be retrieved."})
+    res.status(500).json({ message: error.message, stack: error.stack})
     }
 })
 
@@ -57,7 +57,7 @@ app.get('/api/users/:id', (req, res) => {
         }
     }
     catch (error) {
-        res.status(500).json({message: 'server error'})
+        res.status(500).json({ message: error.message, stack: error.stack})
     }
 })
 
@@ -73,10 +73,34 @@ app.delete('/api/users/:id', (req, res)=> {
         }
     }
     catch (error){
-        res.status(500).json({errorMessage: 'user cannot be removed'})
+        res.status(500).json({ message: error.message, stack: error.stack})
     }
 })
 
+
+//update user info
+app.put('/api/users/:id', (req, res)=> {
+    const { id } = req.params
+    const { name, bio } = req.body
+    const indexOfUser = users.findIndex(user => user.id === id)
+    console.log("i of user", indexOfUser)
+    try{
+        if (indexOfUser !== -1) {
+            if (name && bio){
+                users[indexOfUser] = {id, name, bio }
+                res.status(200).json({ id, name, bio })
+            } else {
+                res.status(400).json({errorMessage: "Please provide name and bio for the user."})
+            }
+        }
+        else {
+            res.status(404).json({message: "The user with the specified ID does not exist."})
+        }
+    }
+    catch (error){
+        res.status(500).json({ message: error.message, stack: error.stack})
+    }
+})
 
 
 app.use('*', (req, res) => {
