@@ -16,7 +16,7 @@ let users = [
     }
 ]
 
-//add users
+// add users
 app.post('/api/users', (req, res) => {
     const { name, bio } = req.body
    try { 
@@ -69,7 +69,7 @@ app.delete('/api/users/:id', (req, res)=> {
             res.status(404).json({errorMessage: 'cannot find that user'})
         } else {
             users = users.filter(user => user.id !== id)
-            res.status(200).json({message: `user with id ${id} was deleted`})
+            res.status(204).json({message: `user with id ${id} was deleted`})
         }
     }
     catch (error){
